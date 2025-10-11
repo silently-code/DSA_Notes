@@ -1,0 +1,123 @@
+✅ LeetCode 189: Rotate Array
+
+🧠 Approach: Reverse Method (Three-Step Rotation)
+
+🔍 Problem Statement
+
+Given an integer array nums, rotate the array to the right by k steps — where k is non-negative.
+
+Example:
+
+Input: nums = [1,2,3,4,5,6,7], k = 3  
+Output: [5,6,7,1,2,3,4]
+
+💡 Intuition
+
+When we rotate the array to the right by k steps, each element moves to a new position i + k, wrapping around if needed.
+Instead of moving elements one by one (which is inefficient), we can use reversing to rotate the array in-place with O(1) space.
+
+⚙️ Approach (Three-Step Reverse)
+
+Let nums = [1, 2, 3, 4, 5, 6, 7], k = 3.
+
+Step 1: Reverse the entire array
+
+Before: [1, 2, 3, 4, 5, 6, 7]  
+After:  [7, 6, 5, 4, 3, 2, 1]
+
+
+Step 2: Reverse the first k elements (k = 3)
+
+Reverse [7, 6, 5] → [5, 6, 7]  
+Array becomes: [5, 6, 7, 4, 3, 2, 1]
+
+
+Step 3: Reverse the remaining n-k elements
+
+Reverse [4, 3, 2, 1] → [1, 2, 3, 4]  
+Final Array: [5, 6, 7, 1, 2, 3, 4]
+
+🔁 Dry Run Visualization
+Step	              Action	                       Array State
+Initial	            Input	                     [1, 2, 3, 4, 5, 6, 7]
+Step 1	       Reverse whole array	           [7, 6, 5, 4, 3, 2, 1]
+Step 2	      Reverse first 3 elements	      [5, 6, 7, 4, 3, 2, 1]
+Step 3	    Reverse remaining 4 elements	    [5, 6, 7, 1, 2, 3, 4]
+
+✅ Final Output: [5, 6, 7, 1, 2, 3, 4]
+
+⏱️ Complexity Analysis
+
+Time Complexity: O(n) — each element is reversed exactly once.
+
+Space Complexity: O(1) — done in-place, without extra array.
+
+💻 Code Implementations
+🔸 Java
+class Solution {
+    public void rotate(int[] nums, int k) {
+        int n = nums.length;
+        k = k % n;
+        reverse(nums, 0, n - 1);     // Step 1: Reverse the whole array
+        reverse(nums, 0, k - 1);     // Step 2: Reverse first k elements
+        reverse(nums, k, n - 1);     // Step 3: Reverse remaining elements
+    }
+
+    private void reverse(int[] nums, int i, int j) {
+        while (i < j) {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
+
+🔸 C
+void reverse(int* nums, int i, int j) {
+    while (i < j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+        i++;
+        j--;
+    }
+}
+
+void rotate(int* nums, int numsSize, int k) {
+    if (numsSize == 0) return;
+    k = k % numsSize;
+
+    reverse(nums, 0, numsSize - 1);     // Step 1
+    reverse(nums, 0, k - 1);            // Step 2
+    reverse(nums, k, numsSize - 1);     // Step 3
+}
+
+🔸 C++
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        k = k % n;
+        reverse(nums.begin(), nums.end());             // Step 1
+        reverse(nums.begin(), nums.begin() + k);       // Step 2
+        reverse(nums.begin() + k, nums.end());         // Step 3
+    }
+};
+
+🔸 Python
+class Solution:
+    def rotate(self, nums, k):
+        n = len(nums)
+        k %= n
+
+        def reverse(i, j):
+            while i < j:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+                j -= 1
+
+        reverse(0, n - 1)      # Step 1: Reverse whole array
+        reverse(0, k - 1)      # Step 2: Reverse first k elements
+        reverse(k, n - 1)      # Step 3: Reverse remaining elements
